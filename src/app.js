@@ -1,8 +1,5 @@
 const express = require('express');
 const productsController = require('./controllers/productsController');
-const {
-  validateId,
-} = require('./middlewares/productsValidator');
 
 const app = express();
 app.use(express.json());
@@ -16,7 +13,7 @@ app.get('/', (_request, response) => {
 
 app.get('/products', productsController.getAll);
 
-app.get('/products/:id', validateId, productsController.getProductById);
+app.get('/products/:id', productsController.getProductById);
 
 app.post('/products', productsController.createProduct);
 
