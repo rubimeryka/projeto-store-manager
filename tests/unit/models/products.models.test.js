@@ -1,33 +1,30 @@
-const chai = require('chai');
+const { expect } = require('chai');
 const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
 
-const { expect } = chai;
-chai.use(sinonChai);
+const productsModels = require('../../../src/models/productsModels');
+const connection = require('../../../src/models/connection');
+const { allProductsResponse, productSearchNameResponse } = require('../../../__tests__/_dataMock');
 
-const { productsService } = require('../../../src/services');
-const productsController = require('../../../src/controllers/products.controller');
-const {
-  /*
-    [...]
-  */
-} = require('./mocks/products.controller.mock');
-const { success, error } = require('../../../src/handlers/response');
+describe('Products Model tests', () => {
+  describe('Sucess case', () => {
+    afterEach(() => sinon.restore());
+    it('GetAll with products', async () => {
+      sinon.stub(connection, 'execute').resolves([allProductsResponse]);
 
-describe('Teste de unidade do controller dos produtos', function () {
-  it('Recuperando um produto pelo seu id', async function () {
-    const res = {};
-    const req = { params: { id: 42 } };
+      const result = await productsModels.getAll();
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
-    sinon
-      .stub(productsService, 'getProductById')
-      .resolves(success(responseNewProduct));
+      expect(result).to.be.an('array');
+      expect(result).to.have.length(3);
+      expect(result[0]).to.contain.keys(['id', 'name']);
+    });
 
-    await productsController.getProductById(req, res);
+    it('Get one product', async () => {
+      sinon.stub(connection, 'execute').resolves([productSearchNameResponse]);
 
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(responseNewProduct);
+      const result = await productsModels.getProductById(1);
+
+      expect(result).to.be.an('object');
+      expect(result).to.contain.keys(['id', 'name']);
+    });
   });
 });
