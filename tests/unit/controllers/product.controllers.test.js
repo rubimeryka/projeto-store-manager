@@ -6,14 +6,14 @@ chai.use(sinonChai);
 
 const { expect } = chai;
 
-const productsService = require('../../../src/services/productsServices');
+const productsService = require('../../../src/services/productsService');
 const productsController = require('../../../src/controllers/productsController');
 const { allProductsResponse, productSearchNameResponse } = require('../../../__tests__/_dataMock');
 
-describe('Products Controller tests', () => {
-  describe('Sucess case', () => {
-    afterEach(() => sinon.restore());
-    it('GetAll with products', async () => {
+describe('Testa Controller dos produtos', () => {
+  afterEach(() => sinon.restore());
+  describe('Success case', () => {
+    it('Testa o retorno dos produtos', async () => {
       sinon.stub(productsService, 'getAll').resolves([allProductsResponse]);
 
       const req = {};
@@ -28,10 +28,10 @@ describe('Products Controller tests', () => {
 
     });
 
-    it('Get one product', async () => {
+    it('Testa se a rota "products/:id" retorna um produto', async () => {
       sinon.stub(productsService, 'getProductById').resolves(productSearchNameResponse);
 
-      const req = { params: 1 };
+      req.params = { id: 1 }
 
       const res = {};
       res.status = sinon.stub().returns(res);
@@ -43,7 +43,7 @@ describe('Products Controller tests', () => {
 
     });
 
-    it('Get wrong id', async () => {
+    it('Testa se a função retorna um erro caso o id não seja encontrado', async () => {
       sinon.stub(productsService, 'getProductById').resolves(null);
 
       const req = { params: 9 };

@@ -13,19 +13,17 @@ const getProductById = async (id) => {
 };
 
 const createProduct = async (name) => {
-  const [{ insertId }] = await connection
-    .execute('INSERT INTO StoreManager.products (name) VALUES (?)', [name]);
+  const [{ insertId }] = await connection.execute(
+    'INSERT INTO StoreManager.products (name) VALUES (?)', [name],
+  );
   return { id: insertId, name };
 };
 
   const updateProduct = async (id, name) => {
     const [update] = await connection.execute(
-      `UPDATE 
-      StoreManager.products
-    SET
-      name = '${name}'
-    WHERE
-      id = ${id};`,
+      `UPDATE StoreManager.products
+    SET name = '${name}'
+    WHERE id = ${id};`,
     );
     return update;
   };

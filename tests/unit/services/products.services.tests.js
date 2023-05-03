@@ -1,15 +1,15 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const productsModels = require('../../../src/models/productsModels');
-const productsService = require('../../../src/services/productsServices');
+const productsModel = require('../../../src/models/productsModel');
+const productsService = require('../../../src/services/productsService');
 const { allProductsResponse, productSearchNameResponse } = require('../../../__tests__/_dataMock');
 
-describe('Products Service tests', () => {
-  describe('Sucess case', () => {
-    afterEach(() => sinon.restore());
-    it('GetAll with products', async () => {
-      sinon.stub(productsModels, 'getAll').resolves([allProductsResponse]);
+describe('Testa Service dos produtos', () => {
+  afterEach(() => sinon.restore());
+  describe('Success case', () => {
+    it('Testa o retorno dos produtos', async () => {
+      sinon.stub(productsModel, 'getAll').resolves([allProductsResponse]);
 
       const result = await productsService.getAll();
 
@@ -17,20 +17,29 @@ describe('Products Service tests', () => {
       expect(result).to.have.length(1);
     });
 
-    it('Get one product', async () => {
-      sinon.stub(productsModels, 'getProductsById').resolves(productSearchNameResponse);
+    it('Testa se a rota "products/:id" retorna um produto', async () => {
+      sinon.stub(productsModel, 'getProductById').resolves(allProductsResponse[0]);
 
-      const result = await productsService.getProductsById(1);
+      const result = await productsService.getProductById(1);
 
-      expect(result).to.be.an('array');
+      expect(result).to.be.an('object');
+      expect(result).to.be.deep.equal(allProductsResponse[0]);
     });
 
-    it('Get wrong id', async () => {
-      sinon.stub(productsModels, 'getProductsById').resolves(null);
+    it('Testa se a função retorna um erro caso o id não seja encontrado', async () => {
+      sinon.stub(productsModel, 'getAll').resolves(allProductsResponse);
 
-      const service = await productsService.getProductsById(9);
+      const response = await productsService.getProductById(9);
 
-      expect(service).to.be.null;
+      expect(response).to.be.an('object');
+      expect(response.message).to.be.equal('Product not found');
     });
+    
+    it('Testa se é possivel atualizar um produto', async function () {
+      sinon.stub(productsModel, 'getAll').resolves(allProductsResponse)
+      const response = await productsService.updateProduct(productSearchNameResponse[0].id, productSearchNameResponse[0].name)
+
+      expect(response).to.be.deep.equal(productSearchNameResponse[0]);
+    })
   });
 });
