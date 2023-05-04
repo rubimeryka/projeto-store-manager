@@ -3,7 +3,7 @@ const sinon = require('sinon');
 
 const productsModel = require('../../../src/models/productsModel');
 const connection = require('../../../src/models/connection');
-const { allProductsResponse, productSearchNameResponse } = require('../../../__tests__/_dataMock');
+const { allProductsResponse, productSearchNameResponse, saleCreateResponse } = require('../../../__tests__/_dataMock');
 
 describe('Testa Model dos produtos', () => {
   
@@ -16,7 +16,7 @@ describe('Testa Model dos produtos', () => {
       const result = await productsModel.getAll();
 
       expect(result).to.be.an('array');
-      expect(result).to.have.length(3);
+      expect(result).to.have.length(3);s
       expect(result[0]).to.contain.keys(['id', 'name']);
     });
 
@@ -27,5 +27,6 @@ describe('Testa Model dos produtos', () => {
 
       expect(response).to.be.deep.equal(allProductsResponse[1]);
     });
+   
   });
 });

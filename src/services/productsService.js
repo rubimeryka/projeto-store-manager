@@ -21,7 +21,7 @@ const createProduct = async (name) => {
 };
 
 const updateProduct = async (id, name) => {
-  const products = await productsModel.getAllProducts();
+  const products = await productsModel.getAll();
   const isInvalidId = !products.some((product) => product.id === Number(id));
   if (isInvalidId) return { type: 404, message: 'Product not found' };
   await productsModel.updateProduct(Number(id), name);
