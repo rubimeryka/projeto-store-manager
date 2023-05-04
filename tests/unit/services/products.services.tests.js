@@ -16,6 +16,7 @@ describe('Testa Service dos produtos', () => {
 
       expect(result).to.be.an('array');
       expect(result).to.have.length(1);
+      sinon.restore();
     });
 
     it('Testa se a rota "products/:id" retorna um produto', async () => {
@@ -23,7 +24,7 @@ describe('Testa Service dos produtos', () => {
 
       const result = await productsService.getProductById(1);
 
-      expect(result).to.be.an('array');
+      expect(result).to.be.an('object');
       expect(result).to.be.deep.equal(allProductsResponse[0]);
     });
 
@@ -32,7 +33,7 @@ describe('Testa Service dos produtos', () => {
 
       const response = await productsService.getProductById(9);
 
-      expect(response).to.be.an('array');
+      expect(response).to.be.an('object');
       expect(response.message).to.be.equal('Product not found');
     });
     

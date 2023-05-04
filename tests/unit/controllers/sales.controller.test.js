@@ -6,23 +6,28 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 const salesController = require('../../../src/controllers/salesController');
-const { responseNewProduct } = require('../../../__tests__/_dataMock');
+const salesService = require('../../../src/services/salesService');
+const { createSaleBody,
+  createSaleReturn } = require('../mocks/controller.mock');
 
 
 describe('Testa Controller de vendas', function () {
+  afterEach(() => sinon.restore());
   it('Recuperando uma venda pelo seu id', async function () {
-    const res = {};
-    const req = { params: { id: 42 } };
+     sinon.stub(salesService, 'createSales').resolves();
+      const req = {
+        body: createSaleBody,
+      };
+      const res = {
+        status: () => { },
+        json: () => { },
+      };
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
-    sinon
-      .stub(salesController, 'createSale')
-      .resolves(success(responseNewProduct));
+      sinon.stub(res, 'status').returns(res);
+      sinon.stub(res, 'json').returns(createSaleReturn);
 
-    await salesController.createSale(req, res);
+      const result = await salesController.createSales(req, res);
 
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(responseNewProduct);
+      expect(res.json).to.be.deep.equal(createSaleReturn);
   });
 });

@@ -31,7 +31,7 @@ describe('Testa Controller dos produtos', () => {
     it('Testa se a rota "products/:id" retorna um produto', async () => {
       sinon.stub(productsService, 'getProductById').resolves(productSearchNameResponse);
 
-      req.params = { id: 42 }
+      const req = { params: { id: 42 } };
 
       const res = {};
       res.status = sinon.stub().returns(res);

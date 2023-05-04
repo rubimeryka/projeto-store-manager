@@ -16,7 +16,7 @@ describe('Testa Model dos produtos', () => {
       const result = await productsModel.getAll();
 
       expect(result).to.be.an('array');
-      expect(result).to.have.length(3);s
+      expect(result).to.have.length(3);
       expect(result[0]).to.contain.keys(['id', 'name']);
     });
 

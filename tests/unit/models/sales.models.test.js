@@ -9,6 +9,7 @@ const salesModel  = require('../../../src/models/salesModel');
 
 
 describe('Testa Model de vendas', function () {
+  afterEach(() => sinon.restore());
   it('Recuperando uma venda pelo seu id', async function () {
     const res = {};
     const req = { params: { id: 42 } };
@@ -16,22 +17,17 @@ describe('Testa Model de vendas', function () {
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
     sinon
-      .stub(productsService, 'getProductById')
-      .resolves(success(responseNewProduct));
+      .stub(salesModel, 'createSalesProduct')
+      .resolves(responseNewProduct);
 
-    await productsController.getProductById(req, res);
+    await salesModel.createSalesProduct(req, res);
 
     expect(res.status).to.have.been.calledWith(200);
     expect(res.json).to.have.been.calledWith(responseNewProduct);
   });
   it('Testa se é possível cadastrar nova venda', async function () {
-    sinon.stub(salesModel, 'createSalesProduct').resolves(saleCreateResponse.id);
-    sinon.stub(connection, 'execute').resolves()
-    sinon.stub(connection, 'execute').resolves([{ insertId: saleCreateResponse.id }])
-
-    const response = await salesModel.createSales()
-
-    expect(response).to.be.equal(saleCreateResponse.id);
-
+    sinon.stub(connection, 'execute').resolves([{ insertId: 1 }]);
+    const result = await salesModel.createSales({ name: 'teste' });
+    expect(result).to.be.deep.equal(1)
   })
 });
