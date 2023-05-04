@@ -7,14 +7,18 @@ chai.use(sinonChai);
 
 const salesService = require('../../../src/services/salesService');
 const salesModel = require('../../../src/models/salesModel');
-const { saleRegistered, rightSaleBody } = require('../../../__tests__/_dataMock');
+const { rightSaleBody } = require('../../../__tests__/_dataMock');
+const { createSaleBody,
+  createSaleReturn } = require('../mocks/controller.mock');
 
 describe('Testa Service de vendas', function () {
   it('Recuperando uma venda pelo seu id', async function () {
-    sinon.stub(salesModel, 'createSales').resolves(saleRegistered);
+    sinon.stub(salesModel, 'createSales').resolves(createSaleReturn.id);
 
-    const response = await salesService.createSales(rightSaleBody);
+    sinon.stub(salesModel, 'createSalesProduct').resolves();
 
-    expect(response).to.be.deep.equal(saleRegistered);
+    const response = await salesService.createSales(createSaleBody);
+
+    expect(response).to.be.deep.equal(createSaleReturn);
   });
 });

@@ -14,20 +14,19 @@ const { createSaleBody,
 describe('Testa Controller de vendas', function () {
   afterEach(() => sinon.restore());
   it('Recuperando uma venda pelo seu id', async function () {
-     sinon.stub(salesService, 'createSales').resolves();
-      const req = {
-        body: createSaleBody,
-      };
-      const res = {
-        status: () => { },
-        json: () => { },
-      };
+    const res = {};
+    const req = {
+      body: createSaleBody,
+    };
 
-      sinon.stub(res, 'status').returns(res);
-      sinon.stub(res, 'json').returns(createSaleReturn);
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    sinon
+      .stub(salesService, 'createSales')
+      .resolves(createSaleReturn);
 
       const result = await salesController.createSales(req, res);
 
-      expect(res.json).to.be.deep.equal(createSaleReturn);
+      expect(res.json).to.have.been.calledWith(createSaleReturn);
   });
 });

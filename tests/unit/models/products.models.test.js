@@ -21,7 +21,7 @@ describe('Testa Model dos produtos', () => {
     });
 
     it('Testa se a rota "products/:id" retorna um produto', async () => {
-      sinon.stub(connection, 'execute').resolves([allProductsResponse[1]]);
+      sinon.stub(connection, 'execute').resolves([[allProductsResponse[1]]]);
 
       const response = await productsModel.getProductById(2);
 

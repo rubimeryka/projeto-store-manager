@@ -29,19 +29,19 @@ describe('Testa Service dos produtos', () => {
     });
 
     it('Testa se a função retorna um erro caso o id não seja encontrado', async () => {
-      sinon.stub(productsModel, 'getAll').resolves(allProductsResponse);
+      sinon.stub(productsModel, 'getProductById').resolves();
 
       const response = await productsService.getProductById(9);
 
-      expect(response).to.be.an('object');
-      expect(response.message).to.be.equal('Product not found');
+      expect(response).to.be.equal(null);
     });
     
-    it('Testa se é possivel atualizar um produto', async function () {
-      sinon.stub(productsModel, 'getAll').resolves(allProductsResponse)
-      const response = await productsService.updateProduct(productSearchNameResponse[0].id, productSearchNameResponse[0].name)
+    it('Testa se é possivel atualizar um produto', async () => {
+      sinon.stub(productsModel, 'getAll').resolves(allProductsResponse);
+      sinon.stub(productsModel, 'updateProduct').resolves(allProductsResponse);
+      const response = await productsService.updateProduct(allProductsResponse[0].id, allProductsResponse[0].name)
 
-      expect(response).to.be.deep.equal(productSearchNameResponse[0]);
+      expect(response).to.be.deep.equal(allProductsResponse[0]);
     })
     
   });
