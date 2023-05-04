@@ -22,8 +22,9 @@ const createProduct = async (name) => {
   const updateProduct = async (id, name) => {
     const [update] = await connection.execute(
       `UPDATE StoreManager.products
-    SET name = '${name}'
-    WHERE id = ${id};`,
+    SET name = ?
+    WHERE id = ?`,
+      [name, id],
     );
     return update;
   };
